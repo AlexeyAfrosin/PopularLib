@@ -1,5 +1,7 @@
 package com.afrosin.popularlib.view
 
 interface MainView {
-    fun setButtonText(btnIndex: Int, text: String)
+    fun setButton1Text(text: String)
+    fun setButton2Text(text: String)
+    fun setButton3Text(text: String)
 }
