@@ -2,19 +2,14 @@ package com.afrosin.popularlib
 
 import android.os.Bundle
 import com.afrosin.popularlib.databinding.ActivityMainBinding
-import com.afrosin.popularlib.presenter.MainPresenter
 import com.afrosin.popularlib.view.AndroidScreens
 import com.afrosin.popularlib.view.BackButtonListener
-import com.afrosin.popularlib.view.MainView
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
-import moxy.ktx.moxyPresenter
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity() {
 
     private val navigator = AppNavigator(this, R.id.container)
-    private val presenter by moxyPresenter { MainPresenter(App.instance.router, AndroidScreens()) }
-
     private var _vb: ActivityMainBinding? = null
     private val vb get() = _vb!!
 
@@ -22,6 +17,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         _vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb.root)
+        App.instance.router.replaceScreen(AndroidScreens().users())
     }
 
     override fun onResumeFragments() {
@@ -41,6 +37,5 @@ class MainActivity : MvpAppCompatActivity(), MainView {
                 return
             }
         }
-        presenter.backClicked()
     }
 }
