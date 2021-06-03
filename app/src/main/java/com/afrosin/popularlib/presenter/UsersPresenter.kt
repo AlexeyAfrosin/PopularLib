@@ -41,9 +41,12 @@ class UsersPresenter(
     }
 
     private fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
-        viewState.updateList()
+        usersRepo.getUsers().subscribe { githubUser -> addUser(githubUser) }
+    }
+
+    private fun addUser(githubUser: GithubUser) {
+        usersListPresenter.users.add(githubUser)
+        viewState.updateInsertedItem(usersListPresenter.users.size - 1)
     }
 
     fun backPressed(): Boolean {

@@ -49,5 +49,9 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         adapter?.notifyDataSetChanged()
     }
 
+    override fun updateInsertedItem(position: Int) {
+        adapter?.notifyItemInserted(position)
+    }
+
     override fun backPressed() = presenter.backPressed()
 }
