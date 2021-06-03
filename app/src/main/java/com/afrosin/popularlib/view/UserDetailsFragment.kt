@@ -1,20 +1,20 @@
 package com.afrosin.popularlib.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.afrosin.popularlib.App
+import com.afrosin.popularlib.R
 import com.afrosin.popularlib.databinding.FragmentUserDetailsBinding
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.presenter.UserDetailsPresenter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class UserDetailsFragment(private val userData: GithubUser) : MvpAppCompatFragment(),
+class UserDetailsFragment(private val userData: GithubUser) :
+    MvpAppCompatFragment(R.layout.fragment_user_details),
     UserDetailsView, BackButtonListener {
 
-    private var _vb: FragmentUserDetailsBinding? = null
-    private val vb get() = _vb!!
+
+    private val vb by viewBinding(FragmentUserDetailsBinding::bind)
 
     private val presenter: UserDetailsPresenter by moxyPresenter {
         UserDetailsPresenter(
@@ -30,18 +30,6 @@ class UserDetailsFragment(private val userData: GithubUser) : MvpAppCompatFragme
 
     override fun setLoginText(login: String) {
         vb.tvLoginText.text = login
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentUserDetailsBinding.inflate(inflater, container, false).also { _vb = it }.root
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _vb = null
     }
 
     override fun backPressed() = presenter.backPressed()
