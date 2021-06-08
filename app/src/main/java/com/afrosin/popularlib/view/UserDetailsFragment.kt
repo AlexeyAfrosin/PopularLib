@@ -14,7 +14,7 @@ class UserDetailsFragment(private val userData: GithubUser) :
     UserDetailsView, BackButtonListener {
 
 
-    private val vb by viewBinding(FragmentUserDetailsBinding::bind)
+    private val vb: FragmentUserDetailsBinding by viewBinding()
 
     private val presenter: UserDetailsPresenter by moxyPresenter {
         UserDetailsPresenter(

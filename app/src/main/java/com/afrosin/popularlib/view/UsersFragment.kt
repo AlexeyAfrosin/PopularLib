@@ -12,7 +12,7 @@ import moxy.ktx.moxyPresenter
 
 class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, BackButtonListener {
 
-    private val vb by viewBinding(FragmentUsersBinding::bind)
+    private val vb: FragmentUsersBinding by viewBinding()
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
