@@ -1,6 +1,6 @@
 package com.afrosin.popularlib.model
 
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 class GithubUsersRepo {
     private val repositories = listOf(
@@ -12,7 +12,7 @@ class GithubUsersRepo {
         GithubUser("login6")
     )
 
-    fun getUsers(): Observable<List<GithubUser>> {
-        return Observable.just(repositories)
+    fun getUsers(): Single<List<GithubUser>> {
+        return Single.just(repositories)
     }
 }
