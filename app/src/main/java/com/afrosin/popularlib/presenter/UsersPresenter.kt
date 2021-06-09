@@ -6,6 +6,7 @@ import com.afrosin.popularlib.view.IScreens
 import com.afrosin.popularlib.view.UserItemView
 import com.afrosin.popularlib.view.UsersView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
 class UsersPresenter(
@@ -28,6 +29,8 @@ class UsersPresenter(
     }
 
     val usersListPresenter = UserListPresenter()
+    private var disposable: Disposable? = null
+
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -40,8 +43,13 @@ class UsersPresenter(
         }
     }
 
+    override fun detachView(view: UsersView?) {
+        disposable?.dispose()
+        super.detachView(view)
+    }
+
     private fun loadData() {
-        usersRepo.getUsers().subscribe { githubUsers -> addUsers(githubUsers) }
+        disposable = usersRepo.getUsers().subscribe { githubUsers -> addUsers(githubUsers) }
     }
 
     private fun addUsers(githubUsers: List<GithubUser>) {
