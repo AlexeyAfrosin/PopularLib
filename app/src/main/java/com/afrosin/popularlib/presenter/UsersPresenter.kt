@@ -43,9 +43,9 @@ class UsersPresenter(
         }
     }
 
-    override fun detachView(view: UsersView?) {
+    override fun onDestroy() {
         disposable?.dispose()
-        super.detachView(view)
+        super.onDestroy()
     }
 
     private fun loadData() {
