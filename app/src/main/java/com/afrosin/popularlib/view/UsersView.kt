@@ -9,4 +9,5 @@ interface UsersView : MvpView {
     fun init()
     fun updateList()
     fun updateInsertedItem(position: Int)
+    fun updateConvertStatus(statusName: String)
 }

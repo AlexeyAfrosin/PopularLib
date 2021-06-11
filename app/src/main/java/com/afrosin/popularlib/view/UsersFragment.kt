@@ -1,5 +1,6 @@
 package com.afrosin.popularlib.view
 
+import android.os.Environment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.afrosin.popularlib.App
@@ -13,6 +14,8 @@ import moxy.ktx.moxyPresenter
 class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, BackButtonListener {
 
     private val vb: FragmentUsersBinding by viewBinding()
+    private val directoryDownloadsPath =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
@@ -28,9 +31,17 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, 
     }
 
     override fun init() {
-        vb.rvUsers.layoutManager = LinearLayoutManager(context)
         adapter = UsersRVAdapter(presenter.usersListPresenter)
-        vb.rvUsers.adapter = adapter
+
+        with(vb) {
+            rvUsers.layoutManager = LinearLayoutManager(context)
+            rvUsers.adapter = adapter
+            btnConvert.setOnClickListener {
+                val fileNamePng = "${directoryDownloadsPath}/testJpg.png"
+                val fileNameJpg = "${directoryDownloadsPath}/testJpg.jpg"
+                presenter.convertJpgToPng(fileNameJpg, fileNamePng)
+            }
+        }
     }
 
     override fun updateList() {
@@ -39,6 +50,10 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, 
 
     override fun updateInsertedItem(position: Int) {
         adapter?.notifyItemInserted(position)
+    }
+
+    override fun updateConvertStatus(statusName: String) {
+        vb.tvConvertStatus.text = statusName
     }
 
     override fun backPressed() = presenter.backPressed()

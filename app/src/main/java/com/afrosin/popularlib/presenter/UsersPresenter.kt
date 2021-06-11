@@ -2,10 +2,13 @@ package com.afrosin.popularlib.presenter
 
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUsersRepo
+import com.afrosin.popularlib.scheduler.SchedulerFactory
+import com.afrosin.popularlib.utils.*
 import com.afrosin.popularlib.view.IScreens
 import com.afrosin.popularlib.view.UserItemView
 import com.afrosin.popularlib.view.UsersView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
@@ -30,6 +33,7 @@ class UsersPresenter(
 
     val usersListPresenter = UserListPresenter()
     private var disposable: Disposable? = null
+    private var disposableConvert: Disposable? = null
 
 
     override fun onFirstViewAttach() {
@@ -45,6 +49,7 @@ class UsersPresenter(
 
     override fun onDestroy() {
         disposable?.dispose()
+        disposableConvert?.dispose()
         super.onDestroy()
     }
 
@@ -61,4 +66,32 @@ class UsersPresenter(
         router.exit()
         return true
     }
+
+    fun convertJpgToPng(fileNameJpg: String, fileNamePng: String) {
+        val defaultSchedulers = SchedulerFactory().create()
+        disposableConvert =
+            Single.fromCallable { readFileToStream(fileNameJpg) }
+                .subscribeOn(defaultSchedulers.backgroundIo())
+                .observeOn(defaultSchedulers.backgroundComputation())
+                .map { inputStream -> streamToBitmap(inputStream) }
+                .map { bitmap -> bitmap!!.toPng() }
+                .observeOn(defaultSchedulers.backgroundIo())
+                .map { pngStream -> saveToFile(pngStream, fileNamePng) }
+                .subscribeOn(defaultSchedulers.main())
+                .subscribe(
+                    { onConvertSuccess() },
+                    { error -> onConvertError(error) }
+                )
+    }
+
+    private fun onConvertSuccess() {
+        viewState.updateConvertStatus(ConvertState.END.caption)
+    }
+
+
+    private fun onConvertError(error: Throwable) {
+        viewState.updateConvertStatus("${ConvertState.ERROR.caption} ${error.message}")
+
+    }
+
 }

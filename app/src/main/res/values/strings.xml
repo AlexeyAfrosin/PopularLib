@@ -7,4 +7,5 @@
     <string name="btn_counter2_text">0</string>
     <string name="btn_counter3_text">0</string>
     <string name="tv_login_caption">Логин:</string>
+    <string name="btn_convert">Конвертировать в png</string>
 </resources>
