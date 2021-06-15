@@ -1,5 +1,5 @@
 package com.afrosin.popularlib.scheduler
 
-class SchedulerFactory {
+object SchedulerFactory {
     fun create(): Schedulers = DefaultSchedulers()
 }

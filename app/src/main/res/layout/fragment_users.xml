@@ -5,16 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <Button
-        android:id="@+id/btn_convert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/btn_convert_margin_start"
-        android:layout_marginTop="@dimen/btn_convert_margin_top"
-        android:layout_marginBottom="@dimen/btn_convert_margin_bottom"
-        android:text="@string/btn_convert" />
-
     <TextView
         android:id="@+id/tv_convert_status"
         android:layout_width="match_parent"

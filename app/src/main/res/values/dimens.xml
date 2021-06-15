@@ -9,4 +9,8 @@
     <dimen name="btn_convert_margin_start">16dp</dimen>
     <dimen name="btn_convert_margin_bottom">16dp</dimen>
     <dimen name="fragment_user_details_layout_margin">10dp</dimen>
+    <dimen name="user_avatar_width">40dp</dimen>
+    <dimen name="user_avatar_height">40dp</dimen>
+    <dimen name="tv_login_margin_start">16dp</dimen>
+    <dimen name="tv_login_margin_top">15dp</dimen>
 </resources>
