@@ -1,22 +1,21 @@
-package com.afrosin.popularlib.presenter.users
+package com.afrosin.popularlib.presenter.userrepo
 
 import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.scheduler.Schedulers
-import com.afrosin.popularlib.view.IScreens
-import com.afrosin.popularlib.view.users.UsersView
+import com.afrosin.popularlib.view.user.UserReposView
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import moxy.MvpPresenter
 
-class UsersPresenter(
-    private val usersRepo: UserRepository,
+class UserReposPresenter(
+    private val userData: GithubUser,
     private val router: Router,
-    private val screens: IScreens,
+    private val usersRepo: UserRepository,
     private val schedulers: Schedulers
-) : MvpPresenter<UsersView>() {
-
+) :
+    MvpPresenter<UserReposView>() {
 
     private val disposables = CompositeDisposable()
 
@@ -26,18 +25,13 @@ class UsersPresenter(
         loadData()
     }
 
-    override fun onDestroy() {
-        disposables.dispose()
-        super.onDestroy()
-    }
-
     private fun loadData() {
         disposables += usersRepo
-            .fetchUsers()
-            .map { it.map(UserMapper::map) }
+            .fetchUserRepo(userData.login)
+            .map { it.map(UserRepoMapper::map) }
             .observeOn(schedulers.main())
             .subscribeOn(schedulers.backgroundNewThread())
-            .subscribe(viewState::showUsers,
+            .subscribe(viewState::showUserRepos,
                 { error -> error.message }
             )
     }
@@ -46,7 +40,4 @@ class UsersPresenter(
         router.exit()
         return true
     }
-
-    fun showUserRepo(user: GithubUser) =
-        router.navigateTo(screens.userDetails(user, usersRepo, schedulers))
 }

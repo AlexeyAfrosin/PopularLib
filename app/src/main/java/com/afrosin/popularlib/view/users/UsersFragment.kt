@@ -34,7 +34,7 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, 
         fun newInstance() = UsersFragment()
     }
 
-    override fun onUserClicked(user: GithubUser) = presenter.showUser(user)
+    override fun onUserClicked(user: GithubUser) = presenter.showUserRepo(user)
 
     override fun init() {
         adapter = UsersRVAdapter(this)

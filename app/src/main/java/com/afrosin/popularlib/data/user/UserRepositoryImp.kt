@@ -10,6 +10,7 @@ class UserRepositoryImp(
     private val cloudUserDataSource: UserDataSource,
     private val cacheUserDataSource: CacheUserDataSource
 ) : UserRepository {
+
     override fun fetchUsers(): Single<List<GithubUser>> = cloudUserDataSource
         .fetchUsers()
         .flatMap(cacheUserDataSource::retain)
@@ -22,4 +23,8 @@ class UserRepositoryImp(
             .fetchUserByLogin(login)
             .toObservable()
     )
+
+    override fun fetchUserRepo(login: String) = cloudUserDataSource
+        .fetchUserRepo(login)
+        .flatMap(cacheUserDataSource::retainUserRepo)
 }
