@@ -11,6 +11,7 @@ import com.afrosin.popularlib.model.GithubUserRepo
 import com.afrosin.popularlib.presenter.userrepo.UserReposPresenter
 import com.afrosin.popularlib.scheduler.Schedulers
 import com.afrosin.popularlib.view.BackButtonListener
+import com.afrosin.popularlib.view.IScreens
 import com.afrosin.popularlib.view.user.adapter.UserReposRVAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -18,7 +19,8 @@ import moxy.ktx.moxyPresenter
 class UserReposFragment(
     private val userData: GithubUser,
     private val usersRepo: UserRepository,
-    private val schedulers: Schedulers
+    private val schedulers: Schedulers,
+    private val screens: IScreens
 ) :
     MvpAppCompatFragment(R.layout.fragment_user_repos),
     UserReposView, BackButtonListener, UserReposRVAdapter.Delegate {
@@ -32,13 +34,13 @@ class UserReposFragment(
             userData,
             App.instance.router,
             usersRepo,
-            schedulers
+            schedulers,
+            screens
         )
     }
 
-    override fun onUserRepoClicked(userRepo: GithubUserRepo) {
-        //        TODO("Not yet implemented")
-    }
+    override fun onUserRepoClicked(userRepo: GithubUserRepo) =
+        presenter.showUserRepoDetails(userRepo)
 
     override fun init() {
         adapter = UserReposRVAdapter(this)
@@ -52,8 +54,13 @@ class UserReposFragment(
     override fun showUserRepos(userRepos: List<GithubUserRepo>) = adapter.submitList(userRepos)
 
     companion object {
-        fun newInstance(userData: GithubUser, usersRepo: UserRepository, schedulers: Schedulers) =
-            UserReposFragment(userData, usersRepo, schedulers)
+        fun newInstance(
+            userData: GithubUser,
+            usersRepo: UserRepository,
+            schedulers: Schedulers,
+            screens: IScreens
+        ) =
+            UserReposFragment(userData, usersRepo, schedulers, screens)
     }
 
     override fun backPressed() = presenter.backPressed()

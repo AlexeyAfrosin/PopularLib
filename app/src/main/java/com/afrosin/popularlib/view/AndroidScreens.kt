@@ -2,9 +2,12 @@ package com.afrosin.popularlib.view
 
 import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.model.GithubUser
+import com.afrosin.popularlib.model.GithubUserRepo
 import com.afrosin.popularlib.scheduler.Schedulers
 import com.afrosin.popularlib.view.user.UserReposFragment
+import com.afrosin.popularlib.view.userrepodeatils.UserRepoDetailsFragment
 import com.afrosin.popularlib.view.users.UsersFragment
+import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 
 class AndroidScreens : IScreens {
@@ -12,7 +15,16 @@ class AndroidScreens : IScreens {
         UsersFragment.newInstance()
     }
 
-    override fun userDetails(userData: GithubUser, usersRepo: UserRepository, schedulers: Schedulers) = FragmentScreen {
-        UserReposFragment.newInstance(userData, usersRepo, schedulers)
+    override fun userRepos(
+        userData: GithubUser,
+        usersRepo: UserRepository,
+        schedulers: Schedulers,
+        screens: IScreens
+    ) = FragmentScreen {
+        UserReposFragment.newInstance(userData, usersRepo, schedulers, screens)
+    }
+
+    override fun userRepoDetails(userRepo: GithubUserRepo): Screen = FragmentScreen {
+        UserRepoDetailsFragment.newInstance(userRepo)
     }
 }

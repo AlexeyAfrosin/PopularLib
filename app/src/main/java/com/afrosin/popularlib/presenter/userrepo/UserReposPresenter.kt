@@ -2,7 +2,9 @@ package com.afrosin.popularlib.presenter.userrepo
 
 import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.model.GithubUser
+import com.afrosin.popularlib.model.GithubUserRepo
 import com.afrosin.popularlib.scheduler.Schedulers
+import com.afrosin.popularlib.view.IScreens
 import com.afrosin.popularlib.view.user.UserReposView
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -13,7 +15,8 @@ class UserReposPresenter(
     private val userData: GithubUser,
     private val router: Router,
     private val usersRepo: UserRepository,
-    private val schedulers: Schedulers
+    private val schedulers: Schedulers,
+    private val screens: IScreens
 ) :
     MvpPresenter<UserReposView>() {
 
@@ -40,4 +43,7 @@ class UserReposPresenter(
         router.exit()
         return true
     }
+
+    fun showUserRepoDetails(userRepo: GithubUserRepo) =
+        router.navigateTo(screens.userRepoDetails(userRepo))
 }

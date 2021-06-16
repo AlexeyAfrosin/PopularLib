@@ -8,5 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class GithubUserRepo(
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
-    @SerializedName("html_url") val htmlUrl: String
+    @SerializedName("html_url") val htmlUrl: String,
+    @SerializedName("forks_count") val forksCount: String
 ) : Parcelable
