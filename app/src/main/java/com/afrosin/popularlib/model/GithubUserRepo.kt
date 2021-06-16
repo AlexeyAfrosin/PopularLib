@@ -5,8 +5,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class GithubUser(
+data class GithubUserRepo(
     @SerializedName("id") val id: String,
-    @SerializedName("login") val login: String,
-    @SerializedName("avatar_url") val avatarUrl: String
+    @SerializedName("name") val name: String,
+    @SerializedName("html_url") val htmlUrl: String,
+    @SerializedName("forks_count") val forksCount: String
 ) : Parcelable

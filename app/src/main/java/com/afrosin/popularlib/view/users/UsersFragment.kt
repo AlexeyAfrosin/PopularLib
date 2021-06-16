@@ -1,46 +1,47 @@
-package com.afrosin.popularlib.view
+package com.afrosin.popularlib.view.users
 
-import android.os.Environment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.afrosin.popularlib.App
 import com.afrosin.popularlib.R
+import com.afrosin.popularlib.data.user.UserRepositoryFactory
 import com.afrosin.popularlib.databinding.FragmentUsersBinding
-import com.afrosin.popularlib.model.GithubUsersRepo
-import com.afrosin.popularlib.presenter.UsersPresenter
+import com.afrosin.popularlib.model.GithubUser
+import com.afrosin.popularlib.presenter.users.UsersPresenter
+import com.afrosin.popularlib.scheduler.SchedulerFactory
+import com.afrosin.popularlib.view.AndroidScreens
+import com.afrosin.popularlib.view.BackButtonListener
+import com.afrosin.popularlib.view.users.adapter.UsersRVAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, BackButtonListener {
+class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, BackButtonListener,
+    UsersRVAdapter.Delegate {
 
     private val vb: FragmentUsersBinding by viewBinding()
-    private val directoryDownloadsPath =
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
-            GithubUsersRepo(),
+            UserRepositoryFactory.create(),
             App.instance.router,
-            AndroidScreens()
+            AndroidScreens(),
+            SchedulerFactory.create()
         )
     }
-    private var adapter: UsersRVAdapter? = null
+    private var adapter = UsersRVAdapter(delegate = this)
 
     companion object {
         fun newInstance() = UsersFragment()
     }
 
+    override fun onUserClicked(user: GithubUser) = presenter.showUserRepo(user)
+
     override fun init() {
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(this)
 
         with(vb) {
             rvUsers.layoutManager = LinearLayoutManager(context)
             rvUsers.adapter = adapter
-            btnConvert.setOnClickListener {
-                val fileNamePng = "${directoryDownloadsPath}/testJpg.png"
-                val fileNameJpg = "${directoryDownloadsPath}/testJpg.jpg"
-                presenter.convertJpgToPng(fileNameJpg, fileNamePng)
-            }
         }
     }
 
@@ -48,12 +49,10 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, 
         adapter?.notifyDataSetChanged()
     }
 
+    override fun showUsers(users: List<GithubUser>) = adapter.submitList(users)
+
     override fun updateInsertedItem(position: Int) {
         adapter?.notifyItemInserted(position)
-    }
-
-    override fun updateConvertStatus(statusName: String) {
-        vb.tvConvertStatus.text = statusName
     }
 
     override fun backPressed() = presenter.backPressed()

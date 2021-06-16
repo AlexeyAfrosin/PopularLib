@@ -7,5 +7,7 @@
     <string name="btn_counter2_text">0</string>
     <string name="btn_counter3_text">0</string>
     <string name="tv_login_caption">Логин:</string>
+    <string name="tv_repo_caption">Репозиторий:</string>
+    <string name="tv_fork_count_caption">Количество форков:</string>
     <string name="btn_convert">Конвертировать в png</string>
 </resources>
