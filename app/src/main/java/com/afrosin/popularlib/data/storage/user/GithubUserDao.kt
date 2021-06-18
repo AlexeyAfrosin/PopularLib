@@ -9,10 +9,10 @@ import io.reactivex.rxjava3.core.Maybe
 @Dao
 interface GithubUserDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateUser(user: GithubUser): Completable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateUsers(users: List<GithubUser>): Completable
 
     @Query("Select * from github_users order by login")
