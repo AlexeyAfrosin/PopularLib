@@ -1,6 +1,6 @@
 package com.afrosin.popularlib.data.user
 
-import com.afrosin.popularlib.data.user.datasource.CacheUserDataSource
+import com.afrosin.popularlib.data.user.datasource.cache.CacheUserDataSource
 import com.afrosin.popularlib.data.user.datasource.UserDataSource
 import com.afrosin.popularlib.model.GithubUser
 import io.reactivex.rxjava3.core.Observable

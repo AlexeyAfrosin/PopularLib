@@ -1,4 +1,4 @@
-package com.afrosin.popularlib.data.user.datasource
+package com.afrosin.popularlib.data.user.datasource.cache
 
 object CacheUserDataSourceFactory {
     private val cacheUserDataSource: CacheUserDataSource by lazy {
