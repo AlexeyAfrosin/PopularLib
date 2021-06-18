@@ -7,6 +7,7 @@ import com.afrosin.popularlib.R
 import com.afrosin.popularlib.data.user.UserRepositoryFactory
 import com.afrosin.popularlib.databinding.FragmentUsersBinding
 import com.afrosin.popularlib.model.GithubUser
+import com.afrosin.popularlib.network.NetworkStateRepositoryFactory
 import com.afrosin.popularlib.presenter.users.UsersPresenter
 import com.afrosin.popularlib.scheduler.SchedulerFactory
 import com.afrosin.popularlib.view.AndroidScreens
@@ -25,7 +26,8 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, 
             UserRepositoryFactory.create(),
             App.instance.router,
             AndroidScreens(),
-            SchedulerFactory.create()
+            SchedulerFactory.create(),
+            NetworkStateRepositoryFactory.create()
         )
     }
     private var adapter = UsersRVAdapter(delegate = this)
