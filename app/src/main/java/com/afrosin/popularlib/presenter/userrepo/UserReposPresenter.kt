@@ -3,6 +3,8 @@ package com.afrosin.popularlib.presenter.userrepo
 import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
+import com.afrosin.popularlib.network.NetworkState
+import com.afrosin.popularlib.network.NetworkStateRepository
 import com.afrosin.popularlib.scheduler.Schedulers
 import com.afrosin.popularlib.view.IScreens
 import com.afrosin.popularlib.view.user.UserReposView
@@ -16,7 +18,8 @@ class UserReposPresenter(
     private val router: Router,
     private val usersRepo: UserRepository,
     private val schedulers: Schedulers,
-    private val screens: IScreens
+    private val screens: IScreens,
+    private val networkStateRepository: NetworkStateRepository
 ) :
     MvpPresenter<UserReposView>() {
 
@@ -29,6 +32,18 @@ class UserReposPresenter(
     }
 
     private fun loadData() {
+        disposables +=
+            networkStateRepository
+                .watchForNetworkState()
+                .filter { networkState -> networkState == NetworkState.CONNECTED }
+                .observeOn(schedulers.main())
+                .doOnNext { displayUserRepos() }
+                .subscribeOn(schedulers.backgroundNewThread())
+                .subscribe()
+        displayUserRepos()
+    }
+
+    private fun displayUserRepos() {
         disposables += usersRepo
             .fetchUserRepo(userData.login)
             .map { it.map(UserRepoMapper::map) }

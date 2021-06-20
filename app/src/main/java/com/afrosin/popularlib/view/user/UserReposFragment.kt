@@ -8,6 +8,7 @@ import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.databinding.FragmentUserReposBinding
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
+import com.afrosin.popularlib.network.NetworkStateRepository
 import com.afrosin.popularlib.presenter.userrepo.UserReposPresenter
 import com.afrosin.popularlib.scheduler.Schedulers
 import com.afrosin.popularlib.view.BackButtonListener
@@ -20,7 +21,8 @@ class UserReposFragment(
     private val userData: GithubUser,
     private val usersRepo: UserRepository,
     private val schedulers: Schedulers,
-    private val screens: IScreens
+    private val screens: IScreens,
+    private val networkStateRepository: NetworkStateRepository
 ) :
     MvpAppCompatFragment(R.layout.fragment_user_repos),
     UserReposView, BackButtonListener, UserReposRVAdapter.Delegate {
@@ -35,7 +37,8 @@ class UserReposFragment(
             App.instance.router,
             usersRepo,
             schedulers,
-            screens
+            screens,
+            networkStateRepository
         )
     }
 
@@ -58,9 +61,11 @@ class UserReposFragment(
             userData: GithubUser,
             usersRepo: UserRepository,
             schedulers: Schedulers,
-            screens: IScreens
+            screens: IScreens,
+            networkStateRepository: NetworkStateRepository
+
         ) =
-            UserReposFragment(userData, usersRepo, schedulers, screens)
+            UserReposFragment(userData, usersRepo, schedulers, screens, networkStateRepository)
     }
 
     override fun backPressed() = presenter.backPressed()
