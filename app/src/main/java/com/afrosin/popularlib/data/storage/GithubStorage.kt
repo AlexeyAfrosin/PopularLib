@@ -2,6 +2,7 @@ package com.afrosin.popularlib.data.storage
 
 import androidx.room.RoomDatabase
 import com.afrosin.popularlib.data.storage.user.GithubUserDao
+import com.afrosin.popularlib.data.storage.user.GithubUserRepoDao
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
 
@@ -9,4 +10,5 @@ import com.afrosin.popularlib.model.GithubUserRepo
 abstract class GithubStorage : RoomDatabase() {
 
     abstract fun gitHubUserDao(): GithubUserDao
+    abstract fun gitHubUserRepoDao(): GithubUserRepoDao
 }

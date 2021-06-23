@@ -2,8 +2,9 @@ package com.afrosin.popularlib.data.user.datasource.cache
 
 import com.afrosin.popularlib.data.storage.GithubStorage
 import com.afrosin.popularlib.data.storage.user.GithubUserDao
-import com.afrosin.popularlib.model.GithubUserRepo
+import com.afrosin.popularlib.data.storage.user.GithubUserRepoDao
 import com.afrosin.popularlib.model.GithubUser
+import com.afrosin.popularlib.model.GithubUserRepo
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
@@ -12,6 +13,7 @@ class CacheUserDataSourceImpl(githubStorage: GithubStorage) : CacheUserDataSourc
     private val cacheUserRepo = mutableListOf<GithubUserRepo>()
 
     private val gitHubUserDao: GithubUserDao = githubStorage.gitHubUserDao()
+    private val gitHubUserRepoDao: GithubUserRepoDao = githubStorage.gitHubUserRepoDao()
 
     override fun retain(users: List<GithubUser>): Single<List<GithubUser>> =
         gitHubUserDao
@@ -32,7 +34,8 @@ class CacheUserDataSourceImpl(githubStorage: GithubStorage) : CacheUserDataSourc
         }
     }
 
-    override fun fetchUserRepo(login: String): Single<List<GithubUserRepo>> =  Single.just(cacheUserRepo)
+    override fun fetchUserRepo(login: String): Flowable<List<GithubUserRepo>> =
+        gitHubUserRepoDao.fetchByUserId("1")
 
     override fun fetchUsers(): Flowable<List<GithubUser>> = gitHubUserDao.fetchUsers()
 

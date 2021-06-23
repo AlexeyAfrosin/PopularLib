@@ -4,7 +4,6 @@ import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 
 interface UserRepository {
     /**
@@ -21,5 +20,5 @@ interface UserRepository {
     /**
      * Возвращает список репозиториев пользователя
      */
-    fun fetchUserRepo(login: String): Single<List<GithubUserRepo>>
+    fun fetchUserRepo(login: String): Flowable<List<GithubUserRepo>>
 }
