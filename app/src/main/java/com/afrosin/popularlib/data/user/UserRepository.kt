@@ -20,5 +20,5 @@ interface UserRepository {
     /**
      * Возвращает список репозиториев пользователя
      */
-    fun fetchUserRepo(login: String): Flowable<List<GithubUserRepo>>
+    fun fetchUserRepo(user: GithubUser): Flowable<List<GithubUserRepo>>
 }

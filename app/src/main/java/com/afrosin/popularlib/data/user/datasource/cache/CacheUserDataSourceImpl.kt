@@ -10,8 +10,6 @@ import io.reactivex.rxjava3.core.Single
 
 class CacheUserDataSourceImpl(githubStorage: GithubStorage) : CacheUserDataSource {
 
-    private val cacheUserRepo = mutableListOf<GithubUserRepo>()
-
     private val gitHubUserDao: GithubUserDao = githubStorage.gitHubUserDao()
     private val gitHubUserRepoDao: GithubUserRepoDao = githubStorage.gitHubUserRepoDao()
 
@@ -26,16 +24,17 @@ class CacheUserDataSourceImpl(githubStorage: GithubStorage) : CacheUserDataSourc
             .updateUser(user)
             .andThen(fetchUserByLogin(user.login))
 
-    override fun retainUserRepo(userRepo: List<GithubUserRepo>): Single<List<GithubUserRepo>> {
-        return Single.fromCallable {
-            cacheUserRepo.clear()
-            cacheUserRepo.addAll(userRepo)
-            cacheUserRepo
-        }
-    }
+    override fun retainUserRepo(
+        userRepo: List<GithubUserRepo>,
+        user: GithubUser
+    ): Single<List<GithubUserRepo>> =
+        gitHubUserRepoDao
+            .updateUserRepos(userRepo)
+            .andThen(fetchUserRepo(user.id))
+            .firstOrError()
 
     override fun fetchUserRepo(login: String): Flowable<List<GithubUserRepo>> =
-        gitHubUserRepoDao.fetchByUserId("1")
+        gitHubUserRepoDao.fetchByUserId(login)
 
     override fun fetchUsers(): Flowable<List<GithubUser>> = gitHubUserDao.fetchUsers()
 

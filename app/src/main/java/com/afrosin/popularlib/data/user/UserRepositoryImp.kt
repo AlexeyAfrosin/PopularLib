@@ -25,7 +25,15 @@ class UserRepositoryImp(
             .toObservable()
     )
 
-    override fun fetchUserRepo(login: String): Flowable<List<GithubUserRepo>> = cloudUserDataSource
-        .fetchUserRepo(login)
-        .flatMapSingle(cacheUserDataSource::retainUserRepo)
+    override fun fetchUserRepo(user: GithubUser): Flowable<List<GithubUserRepo>> =
+        cloudUserDataSource
+            .fetchUserRepo(user.login)
+            .flatMapSingle { userRepos ->
+                cacheUserDataSource.retainUserRepo(userRepos.map { repo ->
+                    UserRepoModelMapper.map(
+                        repo,
+                        user.id
+                    )
+                }, user)
+            }
 }

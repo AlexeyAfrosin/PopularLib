@@ -45,7 +45,7 @@ class UserReposPresenter(
 
     private fun displayUserRepos() {
         disposables += usersRepo
-            .fetchUserRepo(userData.login)
+            .fetchUserRepo(userData)
             .map { it.map(UserRepoMapper::map) }
             .observeOn(schedulers.main())
             .subscribeOn(schedulers.backgroundNewThread())

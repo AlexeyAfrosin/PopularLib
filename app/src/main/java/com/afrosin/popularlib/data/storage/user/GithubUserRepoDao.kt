@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Flowable
 interface GithubUserRepoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun updateUsers(userRepoList: List<GithubUserRepo>): Completable
+    fun updateUserRepos(userRepos: List<GithubUserRepo>): Completable
 
     @Query("Select * from github_user_repos where user_id = :userId")
     fun fetchByUserId(userId: String): Flowable<List<GithubUserRepo>>

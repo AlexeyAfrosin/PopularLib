@@ -25,5 +25,5 @@ data class GithubUserRepo(
     @ColumnInfo(name = "forks_count")
     @SerializedName("forks_count") val forksCount: String,
     @ColumnInfo(name = "user_id")
-    @SerializedName("user_id") val userId: String
+    @SerializedName("user_id") var userId: String? = null
 )
