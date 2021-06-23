@@ -23,8 +23,8 @@ class UsersPresenter(
 
     private val disposables = CompositeDisposable()
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
+    override fun attachView(view: UsersView?) {
+        super.attachView(view)
         viewState.init()
         loadData()
     }
