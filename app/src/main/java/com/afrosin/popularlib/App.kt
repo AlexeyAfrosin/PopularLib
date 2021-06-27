@@ -1,31 +1,31 @@
 package com.afrosin.popularlib
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.content.Context
+import android.util.Log
+import com.afrosin.popularlib.di.DaggerPopularLibComponent
+import com.afrosin.popularlib.scheduler.SchedulerFactory
 import com.github.terrakok.cicerone.Cicerone
-import com.github.terrakok.cicerone.Router
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
 
-class App : Application() {
+class App : DaggerApplication() {
 
-    @SuppressLint("StaticFieldLeak")
-    object ContextHolder {
-        lateinit var context: Context
-    }
+    override fun applicationInjector(): AndroidInjector<App> =
+        DaggerPopularLibComponent
+            .builder()
+            .withContext(applicationContext)
+            .apply {
+                val cicerone = Cicerone.create()
+                withRouter(cicerone.router)
+                withNavigatorHolder(cicerone.getNavigatorHolder())
+            }
+            .withSchedulers(SchedulerFactory.create())
+            .build()
 
-    companion object {
-        lateinit var instance: App
-    }
-
-    private val cicerone: Cicerone<Router> by lazy {
-        Cicerone.create()
-    }
-
-    val navigationHolder get() = cicerone.getNavigatorHolder()
-    val router get() = cicerone.router
     override fun onCreate() {
         super.onCreate()
-        instance = this
-        ContextHolder.context = applicationContext
+        RxJavaPlugins.setErrorHandler { error ->
+            Log.e("GLOBAL_ERRORS", error.message.toString())
+        }
     }
 }

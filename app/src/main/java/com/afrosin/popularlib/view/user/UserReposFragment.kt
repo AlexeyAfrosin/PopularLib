@@ -2,20 +2,21 @@ package com.afrosin.popularlib.view.user
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.afrosin.popularlib.App
 import com.afrosin.popularlib.R
 import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.databinding.FragmentUserReposBinding
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
 import com.afrosin.popularlib.network.NetworkStateRepository
+import com.afrosin.popularlib.presenter.abstr.AbstractFragment
 import com.afrosin.popularlib.presenter.userrepo.UserReposPresenter
 import com.afrosin.popularlib.scheduler.Schedulers
 import com.afrosin.popularlib.view.BackButtonListener
 import com.afrosin.popularlib.view.IScreens
 import com.afrosin.popularlib.view.user.adapter.UserReposRVAdapter
-import moxy.MvpAppCompatFragment
+import com.github.terrakok.cicerone.Router
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UserReposFragment(
     private val userData: GithubUser,
@@ -24,17 +25,20 @@ class UserReposFragment(
     private val screens: IScreens,
     private val networkStateRepository: NetworkStateRepository
 ) :
-    MvpAppCompatFragment(R.layout.fragment_user_repos),
+    AbstractFragment(R.layout.fragment_user_repos),
     UserReposView, BackButtonListener, UserReposRVAdapter.Delegate {
 
 
     private val vb: FragmentUserReposBinding by viewBinding()
     private var adapter = UserReposRVAdapter(delegate = this)
 
+    @Inject
+    lateinit var router: Router
+
     private val presenter: UserReposPresenter by moxyPresenter {
         UserReposPresenter(
             userData,
-            App.instance.router,
+            router,
             usersRepo,
             schedulers,
             screens,

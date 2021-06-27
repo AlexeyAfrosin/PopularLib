@@ -1,28 +1,37 @@
 package com.afrosin.popularlib
 
 import android.os.Bundle
+import com.afrosin.popularlib.presenter.abstr.AbstractActivity
 import com.afrosin.popularlib.view.AndroidScreens
 import com.afrosin.popularlib.view.BackButtonListener
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import moxy.MvpAppCompatActivity
+import javax.inject.Inject
 
-class MainActivity : MvpAppCompatActivity(R.layout.activity_main) {
+class MainActivity : AbstractActivity(R.layout.activity_main) {
 
     private val navigator = AppNavigator(this, R.id.container)
 
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var navigatorHolder: NavigatorHolder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.instance.router.replaceScreen(AndroidScreens().users())
+        router.replaceScreen(AndroidScreens().users())
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.instance.navigationHolder.setNavigator(navigator)
+        navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
         super.onPause()
-        App.instance.navigationHolder.removeNavigator()
+        navigatorHolder.removeNavigator()
     }
 
 
