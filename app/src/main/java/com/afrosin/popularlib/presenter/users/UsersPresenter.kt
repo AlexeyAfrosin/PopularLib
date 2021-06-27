@@ -65,11 +65,7 @@ class UsersPresenter(
     fun showUserRepo(user: GithubUser) =
         router.navigateTo(
             screens.userRepos(
-                user,
-                usersRepo,
-                schedulers,
-                screens,
-                networkStateRepository
+                user
             )
         )
 }

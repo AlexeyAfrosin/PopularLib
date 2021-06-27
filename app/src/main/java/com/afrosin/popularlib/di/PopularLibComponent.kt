@@ -5,6 +5,7 @@ import com.afrosin.popularlib.App
 import com.afrosin.popularlib.di.module.network.NetworkStateModule
 import com.afrosin.popularlib.di.module.user.UserModule
 import com.afrosin.popularlib.scheduler.Schedulers
+import com.afrosin.popularlib.view.AndroidScreens
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import dagger.BindsInstance
@@ -30,6 +31,9 @@ interface PopularLibComponent : AndroidInjector<App> {
 
         @BindsInstance
         fun withSchedulers(scheduler: Schedulers): Builder
+
+        @BindsInstance
+        fun withScreens(androidScreens: AndroidScreens): Builder
 
         fun build(): PopularLibComponent
     }

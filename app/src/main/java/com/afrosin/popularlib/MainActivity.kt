@@ -19,9 +19,12 @@ class MainActivity : AbstractActivity(R.layout.activity_main) {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
+    @Inject
+    lateinit var androidScreens: AndroidScreens
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        router.replaceScreen(AndroidScreens().users())
+        router.replaceScreen(androidScreens.users())
     }
 
     override fun onResumeFragments() {
