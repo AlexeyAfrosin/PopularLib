@@ -5,5 +5,9 @@ import com.afrosin.popularlib.data.user.datasource.cloud.CloudUserDataSource
 
 object UserDataSourceFactory {
 
-    fun create(): UserDataSource = CloudUserDataSource(GitHubApiFactory.create())
+    private val userDataSource: UserDataSource by lazy {
+        CloudUserDataSource(GitHubApiFactory.create())
+    }
+
+    fun create(): UserDataSource = userDataSource
 }

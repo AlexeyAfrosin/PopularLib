@@ -5,16 +5,17 @@ import com.afrosin.popularlib.data.user.datasource.UserDataSource
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import java.util.concurrent.TimeUnit
 
 class CloudUserDataSource(private val gitHubApi: GitHubApi) : UserDataSource {
 
-    override fun fetchUsers(): Flowable<List<GithubUser>> =
+    override fun fetchUsers(): Observable<List<GithubUser>> =
         gitHubApi
             .fetchUsers()
             .delay(1L, TimeUnit.SECONDS)
-            .toFlowable()
+            .toObservable()
 
     override fun fetchUserByLogin(login: String): Single<GithubUser> =
         gitHubApi.fetchUserByLogin(login)
