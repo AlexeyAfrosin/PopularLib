@@ -1,25 +1,29 @@
 package com.afrosin.popularlib.view.userrepodeatils
 
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.afrosin.popularlib.App
 import com.afrosin.popularlib.R
 import com.afrosin.popularlib.databinding.FragmentRepoDetailsBinding
 import com.afrosin.popularlib.model.GithubUserRepo
+import com.afrosin.popularlib.presenter.abstr.AbstractFragment
 import com.afrosin.popularlib.presenter.userrepodetails.UserRepoDetailsPresenter
 import com.afrosin.popularlib.view.BackButtonListener
-import moxy.MvpAppCompatFragment
+import com.github.terrakok.cicerone.Router
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UserRepoDetailsFragment(private val userRepo: GithubUserRepo) :
-    MvpAppCompatFragment(R.layout.fragment_repo_details),
+    AbstractFragment(R.layout.fragment_repo_details),
     UserRepoDetailsView, BackButtonListener {
 
     private val vb: FragmentRepoDetailsBinding by viewBinding()
 
+    @Inject
+    lateinit var router: Router
+
     private val presenter: UserRepoDetailsPresenter by moxyPresenter {
         UserRepoDetailsPresenter(
             userRepo,
-            App.instance.router
+            router
         )
     }
 

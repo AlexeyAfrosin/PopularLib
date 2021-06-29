@@ -12,9 +12,18 @@ class UserRepositoryImp(
     private val cacheUserDataSource: CacheUserDataSource
 ) : UserRepository {
 
-    override fun fetchUsers(): Flowable<List<GithubUser>> = cloudUserDataSource
+    override fun fetchUsers(): Observable<List<GithubUser>> = cloudUserDataSource
         .fetchUsers()
-        .flatMapSingle(cacheUserDataSource::retain)
+        .flatMap(::fetchFromCloudIfRequired)
+
+    private fun fetchFromCloudIfRequired(users: List<GithubUser>): Observable<List<GithubUser>> =
+        if (users.isEmpty()){
+            cloudUserDataSource
+                .fetchUsers()
+                .flatMapSingle(cacheUserDataSource::retain)
+        } else {
+            Observable.just(users)
+        }
 
     override fun fetchUserByLogin(login: String): Observable<GithubUser> = Observable.concat(
         cacheUserDataSource

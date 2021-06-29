@@ -6,6 +6,7 @@ import com.afrosin.popularlib.data.storage.user.GithubUserRepoDao
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 class CacheUserDataSourceImpl(githubStorage: GithubStorage) : CacheUserDataSource {
@@ -36,10 +37,10 @@ class CacheUserDataSourceImpl(githubStorage: GithubStorage) : CacheUserDataSourc
     override fun fetchUserRepo(login: String): Flowable<List<GithubUserRepo>> =
         gitHubUserRepoDao.fetchByUserId(login)
 
-    override fun fetchUsers(): Flowable<List<GithubUser>> = gitHubUserDao.fetchUsers()
+    override fun fetchUsers(): Observable<List<GithubUser>> = gitHubUserDao.fetchUsers()
 
     override fun fetchUserByLogin(login: String): Single<GithubUser> =
         gitHubUserDao
             .fetchByLogin(login)
-            .switchIfEmpty(Single.error(RuntimeException("User not found")))
+            .onErrorResumeNext { Single.error(RuntimeException("User not found")) }
 }

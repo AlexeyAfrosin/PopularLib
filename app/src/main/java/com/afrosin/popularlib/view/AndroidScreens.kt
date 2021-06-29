@@ -1,10 +1,7 @@
 package com.afrosin.popularlib.view
 
-import com.afrosin.popularlib.data.user.UserRepository
 import com.afrosin.popularlib.model.GithubUser
 import com.afrosin.popularlib.model.GithubUserRepo
-import com.afrosin.popularlib.network.NetworkStateRepository
-import com.afrosin.popularlib.scheduler.Schedulers
 import com.afrosin.popularlib.view.user.UserReposFragment
 import com.afrosin.popularlib.view.userrepodeatils.UserRepoDetailsFragment
 import com.afrosin.popularlib.view.users.UsersFragment
@@ -16,21 +13,8 @@ class AndroidScreens : IScreens {
         UsersFragment.newInstance()
     }
 
-    override fun userRepos(
-        userData: GithubUser,
-        usersRepo: UserRepository,
-        schedulers: Schedulers,
-        screens: IScreens,
-        networkStateRepository: NetworkStateRepository
-
-    ) = FragmentScreen {
-        UserReposFragment.newInstance(
-            userData,
-            usersRepo,
-            schedulers,
-            screens,
-            networkStateRepository
-        )
+    override fun userRepos(userData: GithubUser) = FragmentScreen {
+        UserReposFragment.newInstance(userData)
     }
 
     override fun userRepoDetails(userRepo: GithubUserRepo): Screen = FragmentScreen {

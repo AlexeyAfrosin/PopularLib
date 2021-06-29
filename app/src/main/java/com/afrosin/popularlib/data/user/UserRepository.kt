@@ -9,7 +9,7 @@ interface UserRepository {
     /**
      * Возвращает список пользователей
      */
-    fun fetchUsers(): Flowable<List<GithubUser>>
+    fun fetchUsers(): Observable<List<GithubUser>>
 
     /**
      * Возвращает пользователя по логину.
